@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS bronze_control AS
+SELECT *
+FROM control
