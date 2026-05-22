@@ -22,9 +22,20 @@ FROM dim_turno;
 SELECT *
 FROM dim_empleados;
 
-SELECT sum(valor_comisiones)
+
+SELECT 
+        sum(valor_comisiones),
+        (SELECT sum(precio_venta)
+        FROM silver_control)
 FROM bridge_empleado;
 
-SELECT sum(precio_venta)
-FROM silver_control;
+SELECT *
+FROM fact_ventas_servicios
+LIMIT 5;
 
+SELECT 
+        albaran_id,
+        data,
+        strftime('%m', data) as mes
+FROM fact_ventas_servicios
+LIMIT 5;

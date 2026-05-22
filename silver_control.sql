@@ -31,6 +31,9 @@ etl_02 as (
                 ROW_NUMBER() OVER (ORDER BY servicio_n_albaran)
                 as albaran_id,
                 servicio_n_albaran as albarana_number,
+                SUBSTR(data, 7,4) || '-' ||
+                SUBSTR(data, 4,2) || '-' ||
+                SUBSTR(data, 1,2) as data,
                 LOWER(TRIM(centro)) as filial,
                 LOWER(TRIM(turno)) as turno,
                 LOWER(TRIM(tipo_servicio)) as tipo_servicio,
