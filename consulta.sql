@@ -35,3 +35,41 @@ LIMIT 5;
 
 SELECT *
 FROM dim_data;
+
+WITH separacion as(
+SELECT albaran_id,
+        valor_comisiones,
+        substr(servicio_empleados, 1, instr(servicio_empleados,'/') -1) as empleado1,
+        substr(servicio_empleados, instr(servicio_empleados,'/') +1) as empleado2
+FROM silver_control
+),
+vacio as(
+SELECT albaran_id,
+        valor_comisiones,
+        empleado2,
+CASE
+        WHEN empleado1 = '' THEN '0'
+        ELSE empleado1
+        END as empleado
+FROM separacion
+),
+unir_explode as(
+SELECT albaran_id,
+        valor_comisiones,
+        empleado
+FROM vacio 
+WHERE empleado != '0'
+
+UNION ALL
+SELECT albaran_id,
+        valor_comisiones,
+        empleado2 as empleado
+FROM vacio
+)
+SELECT *
+FROM unir_explode
+ORDER BY albaran_id, empleado;
+
+-- SELECT sum(valor_comisiones),
+--         (SELECT sum(precio_venta) FROM silver_control)
+-- FROM unir_explode;
